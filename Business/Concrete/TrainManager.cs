@@ -29,7 +29,8 @@ namespace Business.Concrete
                             {
                                 VagonAdi = root.Tren.Vagonlar[i].Ad,
                                 KisiSayisi = 0
-                            });    
+                            });
+                    
                 } 
             }
             //eğer uygun vagon yoksa bosvagon döndürülür
@@ -41,20 +42,30 @@ namespace Business.Concrete
             //kisiler farklı yerlere yerleştirilebiliyorsa yerleştirme yapılır uygunVagonlar listesi döndürülür
             if (root.KisilerFarkliVagonlaraYerlestirilebilir)
             {
-                while (c > 0)
-                {
+               
+                    int i = 0;
                     foreach (var vagon in uygunVagonlar)
                     {
-                        if (c > 0)
-
+                    while ((Convert.ToDouble(root.Tren.Vagonlar[i].DoluKoltukAdet) / Convert.ToDouble(root.Tren.Vagonlar[i].Kapasite)) < 0.7)
+                    {
+                        if (c > 0 )
+                        {
                             vagon.KisiSayisi += 1;
-                        c--;
-
+                            c--;
+                            root.Tren.Vagonlar[i].DoluKoltukAdet++;
+                        }
+                        else
+                        {
+                            return new SuccesDataResult<List<UygunVagon>>(uygunVagonlar);
+                        }
                     }
+                       
+                    i++;
+                }
                     
                        
-                    }
-                return new SuccesDataResult<List<UygunVagon>>(uygunVagonlar);
+                
+                
             }
             //kişiler farklı vagonlara yerleştirilemiyorsa farklıyerlericinuygunvagon listesi döndürülür
             else
